@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Query, Param, ParseIntPipe, Body } from '@nestjs/common';
 import { PropertyType } from '@prisma/client';
-import { HomeResponseDto } from './dto/home.dto';
+import { CreateHomeDto, HomeResponseDto, UpdateHomeDto } from './dto/home.dto';
 import { HomeService } from './home.service';
 
 @Controller('home')
@@ -31,23 +31,30 @@ export class HomeController {
     }
 
     @Get(':id')
-    getHomeById() {
-        return {}
+    getHomeById(
+        @Param('id', ParseIntPipe) id: number
+    ): Promise<HomeResponseDto> {
+        return this.homeService.getHomeById(id);
     }
 
     @Post()
-    createHome() {
-        return {}
+    createHome(@Body() body: CreateHomeDto) {
+        return this.homeService.createHome(body);
     }
 
     @Put(':id')
-    updateHome() {
-        return {}
+    updateHome(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() body: UpdateHomeDto
+    ) {
+        return this.homeService.updateHomeById(id, body);
     }
 
     @Delete(':id')
-    deleteHome() {
-        return ''
+    deleteHome(
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        return this.homeService.deleteHomeById(id);
     }
 
 }
